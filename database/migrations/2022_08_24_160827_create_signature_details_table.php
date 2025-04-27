@@ -15,6 +15,7 @@ class CreateSignatureDetailsTable extends Migration
     {
         Schema::create('signature_details', function (Blueprint $table) {
             $table->integer("id")->autoIncrement();
+            // $table->string("nomor_surat", 255)->unique();
             $table->string("hash")->unique();
             $table->string("private_key")->unique();
             $table->string("public_key")->unique();
@@ -34,6 +35,6 @@ class CreateSignatureDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('SignatureDetails');
+        Schema::dropIfExists('signature_details'); // Perhatikan penulisan huruf kecil untuk konsistensi
     }
 }

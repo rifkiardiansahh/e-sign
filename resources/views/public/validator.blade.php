@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,17 +18,18 @@
 
     <script src="{{ asset('js/qrcodejs/qrcode.js') }}"></script>
 </head>
+
 <body>
     <div id="main" class="container" style="margin-top: 5rem; margin-bottom: 5rem;">
         <div class="page-banner home-banner" style="max-height: 1000px; height: fit-content;">
             <div class="row align-items-center flex-wrap-reverse h-100">
                 <div class="col-md-4 py-5 wow fadeInLeft">
                     @if ($data != [])
-                        <h1 class="mb-4 text-success">Tanda tangan sah!</h1>
-                        <a class="btn btn-primary" href="{{ route('index') }}">Menuju Dashboard</a>
+                    <h1 class="mb-4 text-success">Tanda tangan sah!</h1>
+                    <a class="btn btn-primary" href="{{ route('index') }}">Menuju Dashboard</a>
                     @else
-                        <h1 class="text-danger">Tanda tangan tidak sah!</h1>
-                        <a class="btn btn-primary" href="{{ route('index') }}">Menuju Dashboard</a>
+                    <h1 class="text-danger">Tanda tangan tidak sah!</h1>
+                    <a class="btn btn-primary" href="{{ route('index') }}">Menuju Dashboard</a>
                     @endif
                 </div>
                 <div class="col-md-8 py-5 wow zoomIn">
@@ -36,118 +38,134 @@
                         {{-- @php
                             var_dump($data->toArray());
                         @endphp --}}
-                            <i class="mai mai-checkmark text-success" style="font-size: 10em;"></i>
-                            <div class="img-container"></div>
-                            <script>
-                                $(document).ready(function(){
-                                    $.ajax({
-                                        url: `{{ url('/get-img') }}`,
-                                        type: "POST",
-                                        data: {
-                                            _token: '{{ csrf_token() }}',
-                                            public_key: '{{ $data->toArray()["signature_detail"]["public_key"] }}'
-                                        },
-                                        success: (res) => {
-                                            document.querySelector(".img-container").innerHTML = `
+                        <i class="mai mai-checkmark text-success" style="font-size: 10em;"></i>
+                        <div class="img-container"></div>
+                        <script>
+                            $(document).ready(function() {
+                                $.ajax({
+                                    url: `{{ url('/get-img') }}`,
+                                    type: "POST",
+                                    data: {
+                                        _token: '{{ csrf_token() }}',
+                                        public_key: '{{ $data->toArray()["signature_detail"]["public_key"] }}'
+                                    },
+                                    success: (res) => {
+                                        document.querySelector(".img-container").innerHTML = `
                                                 <img id="sign-preview" src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
                                                 <div id="qrcode" style="display: none"></div>
                                                 <canvas id="sign-img" style="display: flex" width="550px" height="350px"></canvas>
                                             `
-                                            const image = document.querySelector('#sign-preview')
-                                            const canvas = document.querySelector("#sign-img")
-                                            const ctx = canvas.getContext("2d")
+                                        const image = document.querySelector('#sign-preview')
+                                        const canvas = document.querySelector("#sign-img")
+                                        const ctx = canvas.getContext("2d")
 
-                                            image.onload = function() {
-                                                var canvasHeight = image.height * (350/image.width)
-                                                // console.log(image.height+ " " + image.width+" "+canvasHeight)
-                                                if (parseFloat(canvasHeight) > parseFloat(175)) {
-                                                    canvas.height = canvasHeight
-                                                }else{
-                                                    canvas.height = 175
-                                                }
-                                                setTimeout(() => {
-                                                    const width = image.width
-                                                    const height = image.height
-                                                    let rectangleSide = 0
-                                                    if (width > height) {
-                                                        rectangleSide = height
-                                                    } else{
-                                                        rectangleSide = width
-                                                    }
-                                                    
-                                                    if (height > width) {
-                                                        ctx.drawImage( image, 0, 0, image.height * (350/image.width), 350)
-                                                    } else {
-                                                        ctx.drawImage( image, 0, 0, 350, image.height * (350/image.width))
-                                                    }
-                                                    const qrcode = new QRCode("qrcode", {
-                                                        text: "{{ url('/verification/qrcode') }}/"+'{{ $data->toArray()["signature_detail"]["public_key"] }}',
-                                                        width: rectangleSide,
-                                                        height: rectangleSide,
-                                                        colorDark : "#000000",
-                                                        colorLight : "#ffffff",
-                                                        correctLevel : QRCode.CorrectLevel.H
-                                                    })
-                                                    setTimeout(() => {
-                                                        // canvas set draw image (elementSelector, distance_from_leftside_canvas, distance_from_topside_canvas, qrcode_height, qrcode_width)
-                                                        ctx.drawImage( document.querySelector('#qrcode img'), 360, canvas.height * 0.1, 150, 150)
-                                                        const data = canvas.toDataURL("image/png")
-                                                    }, 500)
-                                                }, 500)
+                                        image.onload = function() {
+                                            var canvasHeight = image.height * (350 / image.width)
+                                            // console.log(image.height+ " " + image.width+" "+canvasHeight)
+                                            if (parseFloat(canvasHeight) > parseFloat(175)) {
+                                                canvas.height = canvasHeight
+                                            } else {
+                                                canvas.height = 175
                                             }
-                                            image.src = "{{ asset('storage') }}/"+res.signature
-                                        },
-                                    })
+                                            setTimeout(() => {
+                                                const width = image.width
+                                                const height = image.height
+                                                let rectangleSide = 0
+                                                if (width > height) {
+                                                    rectangleSide = height
+                                                } else {
+                                                    rectangleSide = width
+                                                }
+
+                                                if (height > width) {
+                                                    ctx.drawImage(image, 0, 0, image.height * (350 / image.width), 350)
+                                                } else {
+                                                    ctx.drawImage(image, 0, 0, 350, image.height * (350 / image.width))
+                                                }
+                                                const qrcode = new QRCode("qrcode", {
+                                                    text: "{{ url('/verification/qrcode') }}/" + '{{ $data->toArray()["signature_detail"]["public_key"] }}',
+                                                    width: rectangleSide,
+                                                    height: rectangleSide,
+                                                    colorDark: "#000000",
+                                                    colorLight: "#ffffff",
+                                                    correctLevel: QRCode.CorrectLevel.H
+                                                })
+                                                setTimeout(() => {
+                                                    // canvas set draw image (elementSelector, distance_from_leftside_canvas, distance_from_topside_canvas, qrcode_height, qrcode_width)
+                                                    ctx.drawImage(document.querySelector('#qrcode img'), 360, canvas.height * 0.1, 150, 150)
+                                                    const data = canvas.toDataURL("image/png")
+                                                }, 500)
+                                            }, 500)
+                                        }
+                                        image.src = "{{ asset('storage') }}/" + res.signature
+                                    },
                                 })
-                            </script>
-                            <table style="width: 100%; text-align: left; font-weight: bold; word-break: break-all">
-                                <tr>
-                                    <th style="width: 40%"> </th>
-                                    <th> </th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Nama Mahasiswa
-                                    </td>
-                                    <td>
-                                        {{ $data->student->fullname }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Nama Dosen
-                                    </td>
-                                    <td>
-                                        {{ $data->lecturer->fullname }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Perihal
-                                    </td>
-                                    <td>
-                                        {{ $data->signatureDetail->note }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Public Key
-                                    </td>
-                                    <td>
-                                        {{ $data->signatureDetail->public_key }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Signature
-                                    </td>
-                                    <td>
-                                        {{ $data->signatureDetail->signature_key }}
-                                    </td>
-                                </tr>
-                            </table>
+                            })
+                        </script>
+                        <table style="width: 100%; text-align: left; font-weight: bold; word-break: break-all">
+                            <tr>
+                                <th style="width: 40%"> </th>
+                                <th> </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Nama Mahasiswa
+                                </td>
+                                <td>
+                                    {{ $data->student->fullname }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Nama Dosen
+                                </td>
+                                <td>
+                                    {{ $data->lecturer->fullname }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    No. Surat
+                                </td>
+                                <td>
+                                    {{ $data->signatureDetail->nomor_surat }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tanggal
+                                </td>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($data->signatureDetail->created_at)->format('d F Y') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Perihal
+                                </td>
+                                <td>
+                                    {{ $data->signatureDetail->note }}
+                                </td>
+                            </tr>
+                            <!-- <tr>
+                                <td>
+                                    Public Key
+                                </td>
+                                <td>
+                                    {{ $data->signatureDetail->public_key }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Signature
+                                </td>
+                                <td>
+                                    {{ $data->signatureDetail->signature_key }}
+                                </td>
+                            </tr> -->
+                        </table>
                         @else
-                            <i class="mai mai-warning text-danger" style="font-size: 10em;"></i>
+                        <i class="mai mai-warning text-danger" style="font-size: 10em;"></i>
                         @endif
                     </div>
                 </div>
@@ -155,9 +173,10 @@
         </div>
     </div>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-        
+
     <script src="{{ asset('vendor/wow/wow.min.js') }}"></script>
 
     <script src="{{ asset('js/theme.js') }}"></script>
 </body>
+
 </html>

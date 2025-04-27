@@ -51,7 +51,7 @@
                         <label for="signature" class="badge badge-danger">Panjang atau lebar min. 200px</label>
                         <br>
                         <input name="signature" id="signature" required type="file" onchange="loadFile(event)" data-plugin="dropify" data-allowed-file-extensions="png" data-height="100px" data-min-width="200" data-min-height="200" data-max-file-size="1M" class="dropify">
-                        <img  src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
+                        <img src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
 
                         <input required type="hidden" name="hash" id="hash">
                         <div class="modal-footer">
@@ -86,7 +86,7 @@
 
     <script>
         function openModal(hash) {
-            $(':input','form')
+            $(':input', 'form')
                 .not(':button, :submit, :reset, input[name="_token"]')
                 .val(null)
                 .prop('checked', false)
@@ -104,16 +104,32 @@
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Indonesian.json"
             },
-            columnDefs: [
-                { width: '5%', targets: 0 },
-                { width: '15%', targets: 1 },
-                { width: '10%', targets: 2 },
-                { width: '10%', targets: 3 },
-                { width: '30%', targets: 4 },
-                { width: '30%', targets: 5 },
-            ],
-            columns: [
+            columnDefs: [{
+                    width: '5%',
+                    targets: 0
+                },
                 {
+                    width: '15%',
+                    targets: 1
+                },
+                {
+                    width: '10%',
+                    targets: 2
+                },
+                {
+                    width: '10%',
+                    targets: 3
+                },
+                {
+                    width: '30%',
+                    targets: 4
+                },
+                {
+                    width: '30%',
+                    targets: 5
+                },
+            ],
+            columns: [{
                     data: '',
                     render: (data, type, row, meta) => {
                         return meta.row + meta.settings._iDisplayStart + 1
@@ -132,15 +148,15 @@
                 {
                     data: null,
                     render: (data, type, full, meta) => {
-                        if (data.signature_detail.deleted_at != null){
+                        if (data.signature_detail.deleted_at != null) {
                             return `
                                 <div class="text-danger"><b>Ditolak</b></div>
                             `
-                        }else if(data.signature_detail.signature == null){
+                        } else if (data.signature_detail.signature == null) {
                             return `
                                 <div class="text-warning"><b>Belum Direspon</b></div>
                             `
-                        }else {
+                        } else {
                             return `
                                 <div class="text-success"><b>Disetujui</b></div>
                             `
@@ -164,7 +180,7 @@
                         return `
                             ${data.signature_detail.note}
                             <br>
-                            dari: <span style="color: #0388fc">${data.student.fullname}</span>
+                            dari: <span style="color: #0388fc">${data.student.fullname}-(${data.student.userid})</span>
                         `
                     }
                 },
@@ -172,9 +188,9 @@
                     data: null,
                     render: function(data, type, full, meta) {
                         let action = ''
-                        if (data.signature_detail.deleted_at != null){
+                        if (data.signature_detail.deleted_at != null) {
                             return ``
-                        }else if (data.signature_detail.signature != null) {
+                        } else if (data.signature_detail.signature != null) {
                             action = `
                             <div id="loading${meta.row + meta.settings._iDisplayStart + 1}" style="display: none">
                                 <div class="svg" style="margin-left: auto; margin-right:auto; display: block; position: relative; opacity: 100%; width: 100px; height: 100px;">
@@ -193,7 +209,7 @@
                                 </button>
                             </div>
                             `
-                        }else {
+                        } else {
                             action = `
                             <div style="display: flex">
                                 <button onclick=openModal("${data.signature_detail.hash}") style="margin-right: 10px" type="button" class="btn-primary btn-sm">
@@ -212,6 +228,88 @@
                 }
             ]
         })
+
+        // function downloadSignature(public_key, count) {
+        //     $.ajax({
+        //         url: `{{ url('/get-img') }}`,
+        //         type: "POST",
+        //         data: {
+        //             _token: '{{ csrf_token() }}',
+        //             public_key: public_key
+        //         },
+        //         beforeSend: () => {
+        //             document.querySelector(`#downloader${count}`).style.display = "none"
+        //             document.querySelector(`#loading${count}`).style.display = "flex"
+        //         },
+        //         success: (res) => {
+        //             document.querySelector(".img-container").innerHTML = `
+        //                 <img id="sign-preview" src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
+        //                 <div id="qrcode" style="display: none"></div>
+        //                 <canvas id="sign-img" style="display: none" width="1100px" height="700px"></canvas>
+        //             `
+        //             const image = document.querySelector('#sign-preview')
+        //             const canvas = document.querySelector("#sign-img")
+        //             const ctx = canvas.getContext("2d")
+
+        //             image.onload = function() {
+        //                 var canvasHeight = image.height * (700 / image.width)
+        //                 console.log(image.height + " " + image.width + " " + canvasHeight)
+        //                 if (parseFloat(canvasHeight) > parseFloat(350)) {
+        //                     canvas.height = canvasHeight
+        //                 } else {
+        //                     canvas.height = 350
+        //                 }
+
+        //                 setTimeout(() => {
+        //                     const width = image.width
+        //                     const height = image.height
+        //                     let rectangleSide = 200
+        //                     if (width > height) {
+        //                         rectangleSide = height
+        //                     } else {
+        //                         rectangleSide = width
+        //                     }
+
+        //                     if (height > width) {
+        //                         ctx.drawImage(image, 0, 0, image.height * (700 / image.width), 700)
+        //                     } else {
+        //                         ctx.drawImage(image, 0, 0, 700, image.height * (700 / image.width))
+        //                     }
+        //                     const qrcode = new QRCode("qrcode", {
+        //                         text: "{{ url('/verification/qrcode') }}/" + public_key,
+        //                         width: rectangleSide,
+        //                         height: rectangleSide,
+        //                         colorDark: "#000000",
+        //                         colorLight: "#ffffff",
+        //                         correctLevel: QRCode.CorrectLevel.H
+        //                     })
+        //                     document.querySelector(`#loading${count}`).style.display = "none"
+        //                     document.querySelector(`#downloader${count}`).style.display = "flex"
+        //                     setTimeout(() => {
+        //                         // canvas set draw image (elementSelector, distance_from_leftside_canvas, distance_from_topside_canvas, qrcode_height, qrcode_width)
+        //                         ctx.drawImage(document.querySelector('#qrcode img'), 700, canvas.height * 0.1, 300, 300)
+        //                         const data = canvas.toDataURL("image/png")
+        //                         // Create a link
+        //                         const aDownloadLink = document.createElement('a')
+        //                         // Add the name of the file to the link
+        //                         aDownloadLink.download = 'signature.png'
+        //                         // Attach the data to the link
+        //                         aDownloadLink.href = data
+        //                         // Get the code to click the download link
+        //                         aDownloadLink.click()
+        //                         // console.log(canvas.height * 0.1)
+        //                     }, 500)
+        //                 }, 500)
+        //             }
+        //             image.src = "{{ asset('storage') }}/" + res.signature
+
+        //         },
+        //         error: (err) => {
+        //             console.log(hash)
+        //             console.log(err)
+        //         }
+        //     })
+        // }
         function downloadSignature(public_key, count) {
             $.ajax({
                 url: `{{ url('/get-img') }}`,
@@ -221,77 +319,62 @@
                     public_key: public_key
                 },
                 beforeSend: () => {
-                    document.querySelector(`#downloader${count}`).style.display = "none"
-                    document.querySelector(`#loading${count}`).style.display = "flex"
+                    document.querySelector(`#downloader${count}`).style.display = "none";
+                    document.querySelector(`#loading${count}`).style.display = "flex";
                 },
                 success: (res) => {
+                    // Prepare the QR code container and canvas
                     document.querySelector(".img-container").innerHTML = `
-                        <img id="sign-preview" src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
-                        <div id="qrcode" style="display: none"></div>
-                        <canvas id="sign-img" style="display: none" width="1100px" height="700px"></canvas>
-                    `
-                    const image = document.querySelector('#sign-preview')
-                    const canvas = document.querySelector("#sign-img")
-                    const ctx = canvas.getContext("2d")
+                <div id="qrcode" style="display: none"></div>
+                <canvas id="sign-img" style="display: none" width="140" height="140"></canvas>
+            `;
+                    const canvas = document.querySelector("#sign-img");
+                    const ctx = canvas.getContext("2d");
 
-                    image.onload = function() {
-                        var canvasHeight = image.height * (700/image.width)
-                        console.log(image.height+ " " + image.width+" "+canvasHeight)
-                        if (parseFloat(canvasHeight) > parseFloat(350)) {
-                            canvas.height = canvasHeight
-                        }else{
-                            canvas.height = 350
+                    // Set the background color to match the QR code light color
+                    const qrLightColor = "#ffffff"; // Ganti dengan warna yang sesuai jika berbeda
+                    ctx.fillStyle = qrLightColor; // Set background color to match QR code light color
+                    ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with the background color
+
+                    // Create the QR code
+                    const qrcode = new QRCode("qrcode", {
+                        text: "{{ url('/verification/qrcode') }}/" + public_key,
+                        width: 120, // Set QR code size to 120x120
+                        height: 120,
+                        colorDark: "#000000",
+                        colorLight: qrLightColor, // Use the same light color for the QR code
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    // Wait for the QR code to be generated
+                    setTimeout(() => {
+                        const qrCodeImg = document.querySelector('#qrcode img');
+
+                        // Ensure the QR code image is loaded before drawing
+                        if (qrCodeImg) {
+                            // Calculate position to center the QR code in the canvas
+                            const x = (canvas.width - 120) / 2; // Center horizontally
+                            const y = (canvas.height - 120) / 2; // Center vertically
+
+                            // Draw the QR code on the canvas
+                            ctx.drawImage(qrCodeImg, x, y, 120, 120); // Draw QR code at calculated position
+
+                            // Create a data URL for the canvas
+                            const data = canvas.toDataURL("image/png");
+
+                            // Create a link to download the QR code
+                            const aDownloadLink = document.createElement('a');
+                            aDownloadLink.download = 'e-signature.png'; // Name of the downloaded file
+                            aDownloadLink.href = data; // Attach the data URL
+                            aDownloadLink.click(); // Trigger the download
+
+                            // Reset the loading state
+                            document.querySelector(`#loading${count}`).style.display = "none";
+                            document.querySelector(`#downloader${count}`).style.display = "flex";
                         }
-
-                        setTimeout(() => {
-                            const width = image.width
-                            const height = image.height
-                            let rectangleSide = 200
-                            if (width > height) {
-                                rectangleSide = height
-                            } else{
-                                rectangleSide = width
-                            }
-
-                            if (height > width) {
-                                ctx.drawImage( image, 0, 0, image.height * (700/image.width), 700)
-                            } else {
-                                ctx.drawImage( image, 0, 0, 700, image.height * (700/image.width))
-                            }
-                            const qrcode = new QRCode("qrcode", {
-                                text: "{{ url('/verification/qrcode') }}/"+public_key,
-                                width: rectangleSide,
-                                height: rectangleSide,
-                                colorDark : "#000000",
-                                colorLight : "#ffffff",
-                                correctLevel : QRCode.CorrectLevel.H
-                            })
-                            document.querySelector(`#loading${count}`).style.display = "none"
-                            document.querySelector(`#downloader${count}`).style.display = "flex"
-                            setTimeout(() => {
-                                // canvas set draw image (elementSelector, distance_from_leftside_canvas, distance_from_topside_canvas, qrcode_height, qrcode_width)
-                                ctx.drawImage( document.querySelector('#qrcode img'), 700, canvas.height * 0.1, 300, 300)
-                                const data = canvas.toDataURL("image/png")
-                                // Create a link
-                                const aDownloadLink = document.createElement('a')
-                                // Add the name of the file to the link
-                                aDownloadLink.download = 'signature.png'
-                                // Attach the data to the link
-                                aDownloadLink.href = data
-                                // Get the code to click the download link
-                                aDownloadLink.click()
-                                // console.log(canvas.height * 0.1)
-                            }, 500)
-                        }, 500)
-                    }
-                    image.src = "{{ asset('storage') }}/"+res.signature
-                    
+                    }, 500);
                 },
-                error: (err) => {
-                    console.log(hash)
-                    console.log(err)
-                }
-            })
+            });
         }
     </script>
 </div>
@@ -313,13 +396,13 @@
         }, 100);
         document.querySelectorAll('.nav-item')[0].removeEventListener("click", listenerAction)
     }
-    
+
     $('.dropify').dropify({
         messages: {
             'default': 'Masukkan tanda tangan',
             'replace': 'Masukkan tanda tangan pennganti',
-            'remove':  'Hapus',
-            'error':   'Maaf, terjadi kesalahan.'
+            'remove': 'Hapus',
+            'error': 'Maaf, terjadi kesalahan.'
         },
         error: {
             'fileSize': 'Ukuran terlalu besar (1 mb max).',
@@ -344,8 +427,8 @@
             success: (res) => {
                 console.log(res)
                 $('.modal').modal('hide')
-                $('.modal').on('hidden.bs.modal', function (e) {
-                    $(':input','form')
+                $('.modal').on('hidden.bs.modal', function(e) {
+                    $(':input', 'form')
                         .not(':button, :submit, :reset, input[name="_token"]')
                         .val(null)
                         .prop('checked', false)
@@ -361,7 +444,7 @@
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     }
                 }).showToast()
-				dt.ajax.reload()
+                dt.ajax.reload()
             }
         })
     })
@@ -374,7 +457,7 @@
                 _token: "{{ csrf_token() }}",
                 hash: `${$('#inp-delete').val()}`
             },
-            success: function (res) {
+            success: function(res) {
                 if (res == 1) {
                     Toastify({
                         text: "Tanda tangan telah ditolak",
@@ -385,8 +468,7 @@
                         }
                     }).showToast()
                     dt.ajax.reload()
-                }
-                else{
+                } else {
                     Toastify({
                         text: "Aksi Gagal",
                         duration: 3000,

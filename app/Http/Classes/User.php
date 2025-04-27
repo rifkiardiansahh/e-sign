@@ -15,21 +15,23 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class User {
+class User
+{
 
     public function getVerificationQrcode($public_key)
     {
-        $data = Signature::with(['signatureDetail' => function($query){
-                    return $query->select('id', 'hash', 'private_key', 'public_key', 'signature_key', 'note');
-                }, 'student' => function($query)
-                {
-                    return $query->select('id', 'fullname');
-                }, 'lecturer' => function($query)
-                {
-                    return $query->select('id', 'fullname');
-                }
-            ])
-            ->whereHas('signatureDetail', function($query) use($public_key){
+        $data = Signature::with([
+            'signatureDetail' => function ($query) {
+                return $query->select('id', 'hash', 'private_key', 'public_key', 'signature_key', 'note');
+            },
+            'student' => function ($query) {
+                return $query->select('id', 'fullname');
+            },
+            'lecturer' => function ($query) {
+                return $query->select('id', 'fullname');
+            }
+        ])
+            ->whereHas('signatureDetail', function ($query) use ($public_key) {
                 return $query->where('public_key', $public_key)->where('signature', '!=', null);
             })
             ->first();
@@ -52,25 +54,27 @@ class User {
 
     public function authenticate(Request $request)
     {
-        $credentials = $request->validate([
-            'userid' => ['required', 'min:4', 'max:16'],
-            'password' => ['required', 'min:8', 'max:24']
-        ],
-        [
-            'userid.required' => 'User ID tidak boleh kosong',
-            'userid.min' => 'User ID minimal 8 digit',
-            'userid.max' => 'User ID maximal 16 digit',
-            'password.required' => 'Password tidak boleh kosong',
-            'password.min' => 'Password anda kurang dari 8 digit',
-            'password.max' => 'Password anda kurang dari 24 digit',
-        ]);
-        
+        $credentials = $request->validate(
+            [
+                'userid' => ['required', 'min:4', 'max:16'],
+                'password' => ['required', 'min:8', 'max:24']
+            ],
+            [
+                'userid.required' => 'User ID tidak boleh kosong',
+                'userid.min' => 'User ID minimal 8 digit',
+                'userid.max' => 'User ID maximal 16 digit',
+                'password.required' => 'Password tidak boleh kosong',
+                'password.min' => 'Password anda kurang dari 8 digit',
+                'password.max' => 'Password anda kurang dari 24 digit',
+            ]
+        );
+
         try {
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
                 return redirect()->back();
             }
-            return response(["errors"=>Auth::attempt($credentials)], 422);
+            return response(["errors" => Auth::attempt($credentials)], 422);
         } catch (\Throwable $th) {
             dd($th);
         }

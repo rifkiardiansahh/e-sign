@@ -76,7 +76,7 @@
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
-            }else if(form.checkValidity()){
+            } else if (form.checkValidity()) {
                 event.preventDefault()
                 $.ajax({
                     url: "{{ route('signature-req') }}",
@@ -94,7 +94,7 @@
                         $('.modal').modal('hide')
                         $('#form-permohonan')[0].reset()
                         $('#lecturer_id').val(null).trigger('change');
-                        
+
                         form.classList.remove('was-validated');
                     }
                 })
@@ -102,33 +102,75 @@
             form.classList.add('was-validated');
         }, false);
     })();
-    
-    $('select').select2({
-        placeholder: 'Pilih Dosen',
-        dropdownAutoWidth : true,
-        width: '100%',
-        ajax: {
-            url: `{{ route("get-lecturer") }}`,
-            data: function (params) {
-                return {
-                    q: $.trim(params.term),
-                    page: params.page || 1
-                };
-            },
-            processResults: function(data) {
-                let results = []
-                data.forEach((element, _index) => {
-                    results.push({
-                        id: element.id,
-                        text: element.fullname
-                    })
-                });
-                return {
-                    results: results
+
+    // $('select').select2({
+    //     placeholder: 'Pilih Dosen',
+    //     dropdownAutoWidth: true,
+    //     width: '100%',
+    //     ajax: {
+    //         url: `{{ route("get-lecturer") }}`,
+    //         data: function(params) {
+    //             return {
+    //                 q: $.trim(params.term),
+    //                 page: params.page || 1
+    //             };
+    //         },
+    //         processResults: function(data) {
+    //             console.log("Data received:", data); // Debugging line
+    //             let results = [];
+    //             // Adjust based on the actual structure of the response
+    //             const lecturers = Array.isArray(data.data) ? data.data : [];
+    //             lecturers.forEach((element) => {
+    //                 results.push({
+    //                     id: element.id,
+    //                     text: element.fullname
+    //                 });
+    //             });
+    //             return {
+    //                 results: results
+    //             };
+    //         }
+    //     }
+    // });
+    $(document).ready(function() {
+        $('#lecturer_id').select2({
+            dropdownAutoWidth: true,
+            width: '100%',
+            placeholder: 'Pilih Dosen',
+            ajax: {
+                url: `{{ route("get-lecturer") }}`,
+                data: function(params) {
+                    return {
+                        q: $.trim(params.term),
+                        page: params.page || 1
+                    };
+                },
+                processResults: function(data) {
+                    console.log("Data received:", data); // Debugging line
+                    let results = [];
+
+                    // Access the array from the 'original' property
+                    const lecturers = Array.isArray(data.original) ? data.original : [];
+
+                    lecturers.forEach((element) => {
+                        results.push({
+                            id: element.id,
+                            text: element.fullname
+                        });
+                    });
+
+                    return {
+                        results: results
+                    };
                 }
             }
-        }
+        });
+
+        $('#staticBackdrop').on('show.bs.modal', function() {
+            $('#lecturer_id').val(null).trigger('change'); // Clear previous selections
+        });
     });
+
 
     function listenerAction() {
         document.querySelector('.row').style.display = "none"
@@ -148,5 +190,4 @@
     }
 
     document.querySelectorAll('.nav-item')[1].addEventListener("click", listenerAction)
-
 </script>

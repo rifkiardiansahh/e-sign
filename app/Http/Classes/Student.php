@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\DB;
 use EllipticCurve\PrivateKey;
 // use Illuminate\Support\Facades\Hash;
 
-class Student {
+class Student
+{
     public function signatureReq(Request $request)
     {
         DB::beginTransaction();
-        
+
         $privateKey = new PrivateKey();
-        
+
         $signature_detail = SignatureDetail::create([
             'hash' => md5(Carbon::now()->toDateTimeString()),
             'private_key' => $privateKey->toString(),
@@ -31,33 +32,35 @@ class Student {
 
         $signature = Signature::create([
             'signature_detail_id' => $signature_detail->id,
-            'lecturer_id' => $request->post('lecturer_id'),
+            'lecturer_id' => $request->post('lecturer_id', 'fullname'),
             'student_id' => Auth::user()->id
         ]);
 
+
         DB::commit();
-        
+
         return $signature;
     }
 
     public function getLecturer($request)
     {
-        $lecturer = User::where('role', 2)->where('fullname', "like", "%".$request->q."%")->get();
+        $lecturer = User::where('role', 2)->where('fullname', "like", "%" . $request->q . "%")->get();
         return response($lecturer, 200);
     }
 
     public function getListPermohonan()
     {
-        $data = Signature::with(['signatureDetail' => function($query){
-                    return $query->select('id', 'hash', 'public_key', 'private_key', 'signature_key', 'note', 'signature', 'deleted_at');
-                }, 'lecturer' => function($query){
-                    return $query->select('id', 'fullname');
-                }
-            ])
+        $data = Signature::with([
+            'signatureDetail' => function ($query) {
+                return $query->select('id', 'hash', 'public_key', 'private_key', 'signature_key', 'note', 'signature', 'deleted_at');
+            },
+            'lecturer' => function ($query) {
+                return $query->select('id', 'fullname', 'userid');
+            }
+        ])
             ->where('student_id', Auth::user()->id)
             ->select('id', 'lecturer_id', 'signature_detail_id', 'created_at', 'updated_at')
             ->get();
         return $data;
     }
-
 }

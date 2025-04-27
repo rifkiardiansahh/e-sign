@@ -24,7 +24,7 @@
     </div>
     <script>
         function openModal(hash) {
-            $(':input','form')
+            $(':input', 'form')
                 .not(':button, :submit, :reset, input[name="_token"]')
                 .val(null)
                 .prop('checked', false)
@@ -33,6 +33,7 @@
             $(".dropify-clear").trigger("click")
             $('.modal-sign').modal('show')
         }
+
         function deleteModal(id) {
             $('#inp-delete').val(id)
             $('.modal-delete').modal('show')
@@ -46,15 +47,28 @@
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Indonesian.json"
             },
-            columnDefs: [
-                { width: '5%', targets: 0 },
-                { width: '15%', targets: 1 },
-                { width: '20%', targets: 2 },
-                { width: '30%', targets: 3 },
-                { width: '30%', targets: 4 },
-            ],
-            columns: [
+            columnDefs: [{
+                    width: '5%',
+                    targets: 0
+                },
                 {
+                    width: '15%',
+                    targets: 1
+                },
+                {
+                    width: '20%',
+                    targets: 2
+                },
+                {
+                    width: '30%',
+                    targets: 3
+                },
+                {
+                    width: '30%',
+                    targets: 4
+                },
+            ],
+            columns: [{
                     data: '',
                     render: (data, type, row, meta) => {
                         return meta.row + meta.settings._iDisplayStart + 1
@@ -86,7 +100,7 @@
                         return `
                             ${data.signature_detail.note}
                             <br>
-                            dari: <span style="color: #0388fc">${data.student.fullname}</span>
+                            dari: <span style="color: #0388fc">${data.student.fullname}-(${data.student.userid})</span>
                         `
                     }
                 },
@@ -139,7 +153,7 @@
                     <label for="signature" class="badge badge-danger">Panjang atau lebar min. 200px</label>
                     <br>
                     <input name="signature" id="signature" required type="file" onchange="loadFile(event)" data-plugin="dropify" data-allowed-file-extensions="png" data-height="100px" data-min-width="200" data-min-height="200" data-max-file-size="1M" class="dropify">
-                    <img  src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
+                    <img src="" style="display: none; max-width: 700px; max-height:700" alt="Tanda Tangan Preview">
 
                     <input required type="hidden" name="hash" id="hash">
                     <div class="modal-footer">
@@ -178,8 +192,8 @@
         messages: {
             'default': 'Masukkan tanda tangan',
             'replace': 'Masukkan tanda tangan pennganti',
-            'remove':  'Hapus',
-            'error':   'Maaf, terjadi kesalahan.'
+            'remove': 'Hapus',
+            'error': 'Maaf, terjadi kesalahan.'
         },
         error: {
             'fileSize': 'Ukuran terlalu besar (1 mb max).',
@@ -204,8 +218,8 @@
             success: (res) => {
                 console.log(res)
                 $('.modal').modal('hide')
-                $('.modal').on('hidden.bs.modal', function (e) {
-                    $(':input','form')
+                $('.modal').on('hidden.bs.modal', function(e) {
+                    $(':input', 'form')
                         .not(':button, :submit, :reset, input[name="_token"]')
                         .val(null)
                         .prop('checked', false)
@@ -221,7 +235,7 @@
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     }
                 }).showToast()
-				dt.ajax.reload()
+                dt.ajax.reload()
             }
         })
     })
@@ -234,7 +248,7 @@
                 _token: "{{ csrf_token() }}",
                 hash: `${$('#inp-delete').val()}`
             },
-            success: function (res) {
+            success: function(res) {
                 if (res == 1) {
                     Toastify({
                         text: "Tanda tangan telah ditolak",
@@ -245,8 +259,7 @@
                         }
                     }).showToast()
                     dt.ajax.reload()
-                }
-                else{
+                } else {
                     Toastify({
                         text: "Aksi Gagal",
                         duration: 3000,

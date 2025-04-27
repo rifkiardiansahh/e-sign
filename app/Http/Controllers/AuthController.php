@@ -8,13 +8,24 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    protected $collector;
+
+    public function __construct(Collector $collector)
+    {
+        $this->collector = $collector;
+    }
+
     public function index()
     {
-        if (Auth::user() == null) {
+        if (Auth::user() === null) {
             return view('layout.guest');
-        } else if (Auth::user()->role == 1) {
+        }
+
+        if (Auth::user()->role == 1) {
             return view('layout.student')->with('name', Auth::user()->fullname);
-        } else if (Auth::user()->role == 2) {
+        }
+
+        if (Auth::user()->role == 2) {
             return view('layout.lecturer')->with('name', Auth::user()->fullname);
         }
     }
@@ -28,31 +39,29 @@ class AuthController extends Controller
     {
         return response(view('auth.register'), 200);
     }
-    
+
     public function authenticate(Request $request)
     {
-        return Collector::User()->authenticate($request);
+        return $this->collector->user()->authenticate($request);
     }
 
     public function register(Request $request)
     {
-        return Collector::User()->register($request);  
+        return $this->collector->user()->register($request);
     }
 
     public function logout(Request $request)
     {
-        return Collector::User()->logout($request);
+        return $this->collector->user()->logout($request);
     }
 
     public function getVerificationQrcode($public_key)
     {
-        return Collector::User()->getVerificationQrcode($public_key);
+        return $this->collector->user()->getVerificationQrcode($public_key);
     }
 
     public function getImg(Request $request)
     {
-        $data = Collector::User()->getImg($request);
-        return $data;
+        return $this->collector->user()->getImg($request);
     }
-
 }

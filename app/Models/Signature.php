@@ -14,7 +14,7 @@ class Signature extends Model
 
     public function signatureDetail()
     {
-        return $this->hasOne(SignatureDetail::class,'id','signature_detail_id')->withTrashed();
+        return $this->hasOne(SignatureDetail::class, 'id', 'signature_detail_id')->withTrashed();
     }
 
     public function student()
