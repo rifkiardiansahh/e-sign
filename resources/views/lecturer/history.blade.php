@@ -181,6 +181,9 @@
                             ${data.signature_detail.note}
                             <br>
                             dari: <span style="color: #0388fc">${data.student.fullname}-(${data.student.userid})</span>
+                              ${data.signature_detail.nomor_surat ? 
+                    `<br>Nomor: <strong>${data.signature_detail.nomor_surat}</strong>` : 
+                    ''}
                         `
                     }
                 },

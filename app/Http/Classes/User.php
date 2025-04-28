@@ -22,7 +22,7 @@ class User
     {
         $data = Signature::with([
             'signatureDetail' => function ($query) {
-                return $query->select('id', 'hash', 'private_key', 'public_key', 'signature_key', 'note');
+                return $query->select('id', 'nomor_surat', 'hash', 'private_key', 'public_key', 'signature_key', 'note');
             },
             'student' => function ($query) {
                 return $query->select('id', 'fullname');

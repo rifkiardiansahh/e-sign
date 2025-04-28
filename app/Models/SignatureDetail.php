@@ -10,7 +10,7 @@ class SignatureDetail extends Model
 {
     use SoftDeletes;
     use HasFactory;
-    protected $fillable = ['hash', 'private_key', 'public_key', 'signature_key', 'note', 'signature', 'qrcode'];
+    protected $fillable = ['nomor_surat', 'hash', 'private_key', 'public_key', 'signature_key', 'note', 'signature', 'qrcode'];
 
     public function signature()
     {

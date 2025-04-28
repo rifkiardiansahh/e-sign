@@ -15,7 +15,7 @@ class CreateSignatureDetailsTable extends Migration
     {
         Schema::create('signature_details', function (Blueprint $table) {
             $table->integer("id")->autoIncrement();
-            // $table->string("nomor_surat", 255)->unique();
+            $table->string("nomor_surat")->unique()->nullable();
             $table->string("hash")->unique();
             $table->string("private_key")->unique();
             $table->string("public_key")->unique();
