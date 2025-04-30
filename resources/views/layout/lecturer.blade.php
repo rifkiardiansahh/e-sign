@@ -10,6 +10,8 @@
     <meta name="copyright" content="MACode ID, https://macodeid.com/">
 
     <title>Dosen | E-Signature</title>
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/1924480.png') }}"> -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://upload.wikimedia.org/wikipedia/commons/f/f2/Logo_umnu_kebumen.png">
 
     <link rel="stylesheet" href="{{ asset('css/maicons.css') }}">
 

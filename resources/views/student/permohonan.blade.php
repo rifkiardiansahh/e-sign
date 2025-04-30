@@ -72,14 +72,33 @@
                         return meta.row + meta.settings._iDisplayStart + 1
                     }
                 },
+
                 {
-                    data: null,
+                    data: 'created_at',
                     render: function(data, type, full, meta) {
+                        if (!data) return '-';
+
+                        const date = new Date(data);
+                        // WIB adalah UTC+7
+                        date.setHours(date.getHours() + 7);
+
+                        // Array nama bulan dalam Bahasa Indonesia
+                        const monthNames = [
+                            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                        ];
+
+                        const day = String(date.getUTCDate()).padStart(2, '0');
+                        const month = monthNames[date.getUTCMonth()]; // Ambil nama bulan
+                        const year = date.getUTCFullYear();
+                        const hours = String(date.getUTCHours()).padStart(2, '0');
+                        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+
                         return `
-                        <div style="word-break: break-all">
-                            ${data.created_at}
-                        </div>
-                        `
+                     <div style="word-break: break-all">
+                          ${day} ${month} ${year} <br>Pukul : ${hours}:${minutes} WIB
+                     </div>
+                     `;
                     }
                 },
                 {
@@ -112,6 +131,9 @@
                     render: function(data, type, full, meta) {
                         return `
                             ${data.signature_detail.note}
+                             ${data.signature_detail.nomor_surat ? 
+                    `<br>Nomor: <strong>${data.signature_detail.nomor_surat}</strong>` : 
+                    ''}
                         `
                     }
                 },

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Verifikasi E-Signature</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/1924480.png') }}">
+
     <link rel="stylesheet" href="{{ asset('css/maicons.css') }}">
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
@@ -135,8 +137,15 @@
                                 <td>
                                     Tanggal
                                 </td>
-                                <td>
+                                <!-- <td>
                                     {{ \Carbon\Carbon::parse($data->signatureDetail->created_at)->format('d F Y') }}
+                                </td> -->
+                                <td>
+                                    @if($data->signatureDetail->created_at)
+                                    {{ \Carbon\Carbon::parse($data->signatureDetail->created_at)->format('d F Y') }}
+                                    @else
+                                    Tanggal tidak tersedia
+                                    @endif
                                 </td>
                             </tr>
                             <tr>

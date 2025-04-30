@@ -9,6 +9,8 @@
 
     <title>Mahasiswa | E-Signature</title>
 
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/1924480.png') }}"> -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://upload.wikimedia.org/wikipedia/commons/f/f2/Logo_umnu_kebumen.png">
     <link rel="stylesheet" href="{{ asset('css/maicons.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/animate/animate.css') }}">

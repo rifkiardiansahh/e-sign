@@ -20,12 +20,12 @@
             <div class="invalid-feedback">Password harus diisi.</div>
         </div>
         <div class="d-flex justify-content-between align-items-center mb-5">
-            <button  name="login" id="login" class="btn login-btn" type="submit">
+            <button name="login" id="login" class="btn login-btn" type="submit">
                 Login
             </button>
         </div>
-    </form>           
-    <p class="login-wrapper-footer-text">Belum punya akun <a href="javascript:void(0)" class="text-reset">Daftar di sini.</a></p>
+    </form>
+    <p class="login-wrapper-footer-text">Belum punya akun ? <a href="javascript:void(0)" class="text-reset text-success font-weight-bold">Daftar di sini.</a></p>
 </div>
 <script>
     (() => {
@@ -57,7 +57,7 @@
             data: $(this).serialize(),
             success: (res) => {
                 window.location.reload()
-            }, 
+            },
             error: (err) => {
                 err = err.responseJSON.errors
                 document.querySelector('form').classList.remove('was-validated')
