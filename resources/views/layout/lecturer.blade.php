@@ -88,8 +88,10 @@
 
     <footer class="page-footer bg-image" style="background-image: url({{ asset('img/world_pattern.svg') }}); position: absolute; bottom: -30%; width: 100%;">
         <div class="container">
-            <p class="text-center" id="copyright">This template design is taken from <a href="https://macodeid.com/" target="_blank">MACode ID</a></p>
-            <p class="text-center" id="copyright">The application was developed by <a href="https://www.linkedin.com/in/yazeed-arifin-304728193/" target="_blank">Y.Q.A</a></p>
+            <!-- <p class="text-center" id="copyright">This template design is taken from <a href="https://macodeid.com/" target="_blank">MACode ID</a></p>
+            <p class="text-center" id="copyright">The application was developed by <a href="https://www.linkedin.com/in/yazeed-arifin-304728193/" target="_blank">Y.Q.A</a></p> -->
+            <p class="text-center" id="copyright">Teknik Informatika <a href="https://umnu.ac.id/" target="_blank">UMNU Kebumen</a></p>
+            <p class="text-center" id="copyright">copyright &copy; <?php echo date("Y"); ?> TI UMNU KEBUMEN. all rights reserved</p>
         </div>
     </footer>
 

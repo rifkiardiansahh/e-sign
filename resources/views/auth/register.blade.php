@@ -48,7 +48,7 @@
             </button>
         </div>
     </form>
-    <p class="login-wrapper-footer-text">Sudah punya akun? <a href="javascript:void(0)" class="text-reset">Login di sini.</a></p>
+    <p class="login-wrapper-footer-text">Sudah punya akun? <a href="javascript:void(0)" class="text-reset text-success font-weight-bold">Login di sini.</a></p>
 </div>
 <script>
     (() => {
@@ -79,7 +79,7 @@
             data: $(this).serialize(),
             success: (res) => {
                 window.location.reload()
-            }, 
+            },
             error: (err) => {
                 err = err.responseJSON.errors
                 document.querySelector('form').classList.remove('was-validated')

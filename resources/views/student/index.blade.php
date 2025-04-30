@@ -21,7 +21,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade mt-5" style="" id="staticBackdrop" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- <div class="modal fade mt-5" style="" id="staticBackdrop" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
+<div class="modal fade mt-5" id="staticBackdrop" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <form novalidate id="form-permohonan">
         @csrf
         <div class="modal-dialog modal-lg">
